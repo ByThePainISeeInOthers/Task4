@@ -66,6 +66,48 @@ void BucketSort(int** array, int size) {
     }
 }
 
+void CombSort(int** array, int size) {
+    ofstream output;
+    output.open("output9.txt"); //открываем файл вывода
+
+    int step;
+
+    int* column = new int[size];
+
+    for (int columnCounter = 0; columnCounter < size; ++columnCounter) { //проход по столбцам
+        step = size - 1;
+
+        for (int i = 0; i < size; ++i) { //сохранение столбцов в отдельный массив
+            column[i] = array[i][columnCounter];
+        }
+
+        while (step >= 1) { //сортировка
+            for (int i = 0; i + step < size; ++i) {
+                if (columnCounter % 3 == 2) { //по убыванию для каждого третьего столбца
+                    if (column[i] < column[i + step]) {
+                        swap(column[i], column[i + step]);
+                    }
+                }
+                else {
+                    if (column[i] > column[i + step]) { //по возрастанию для остальных
+                        swap(column[i], column[i + step]);
+                    }
+                }
+            }
+            step /= 1.2473309; //изменение шага
+        }
+
+        for (int i = 0; i < size; ++i) { //возвращение значений в изначальный массив
+             array[i][columnCounter] = column[i];
+        }
+    }
+    for (int i = 0; i < size; ++i) { //вывод
+        for (int j = 0; j < size; ++j)
+            output << array[i][j] << ' ';
+        output << endl;
+    }
+}
+
 int main() {
     SetConsoleOutputCP(CP_UTF8); //
     //setlocale(LC_ALL, "rus");
@@ -85,7 +127,7 @@ int main() {
             input >> array[i][j];
 
     BucketSort(array, n); //задание 4
-    //CombSort(array); //задание 9
+    CombSort(array, n); //задание 9
     //SelectionSort(array); //задание 14
     return 0;
 }
