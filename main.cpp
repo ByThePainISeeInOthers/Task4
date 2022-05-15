@@ -108,6 +108,77 @@ void CombSort(int** array, int size) {
     }
 }
 
+void SelectionSort(int** array, int size) {
+    ofstream output;
+    output.open("output14.txt"); //открываем файл вывода
+
+    for (int k = 1; k < size - 1; ++k) { //проход по диагоналям
+        vector<int> diagonal;
+
+        for (int i = 0; i < size; ++i) { //формирование вектора диагонали
+            if (k + i < size) {
+                diagonal.push_back(array[i][k + i]);
+            }
+        }
+
+        for (int i = 0; i < diagonal.size() - 1; ++i) { //сортировка
+            int max_index = i;
+            for (int j = i + 1; j < diagonal.size(); ++j) {
+                if (diagonal[j] > diagonal[max_index]) {
+                    max_index = j;
+                }
+            }
+            if (max_index != i) {
+                swap(diagonal[i], diagonal[max_index]);
+            }
+        }
+
+        int t = 0;
+        for (int i = 0; i < size; ++i) { //занесение диагоналей обратно в массив
+            if (k - i < size) {
+                array[i][k + i] = diagonal[t];
+                ++t;
+            }
+        }
+
+        //вторая часть
+
+        diagonal.clear();
+
+        for (int i = 0; i < size; ++i) { //формирование вектора диагонали
+            if (k + i < size) {
+                diagonal.push_back(array[k + i][i]);
+            }
+        }
+
+        for (int i = 0; i < diagonal.size() - 1; ++i) { //сортировка
+            int max_index = i;
+            for (int j = i + 1; j < diagonal.size(); ++j) {
+                if (diagonal[j] > diagonal[max_index]) {
+                    max_index = j;
+                }
+            }
+            if (max_index != i) {
+                swap(diagonal[i], diagonal[max_index]);
+            }
+        }
+
+        t = 0;
+        for (int i = 0; i < size; ++i) { //занесение диагоналей обратно в массив
+            if (k + i < size) {
+                array[k + i][i] = diagonal[t];
+                ++t;
+            }
+        }
+    }
+
+    for (int i = 0; i < size; ++i) { //вывод
+        for (int j = 0; j < size; ++j)
+            output << array[i][j] << ' ';
+        output << endl;
+    }
+}
+
 int main() {
     SetConsoleOutputCP(CP_UTF8); //
     //setlocale(LC_ALL, "rus");
@@ -126,8 +197,8 @@ int main() {
         for (int j = 0; j < n; ++j)
             input >> array[i][j];
 
-    BucketSort(array, n); //задание 4
-    CombSort(array, n); //задание 9
-    //SelectionSort(array); //задание 14
+    //BucketSort(array, n); //задание 4
+    //CombSort(array, n); //задание 9
+    //SelectionSort(array, n); //задание 14
     return 0;
 }
